@@ -4,6 +4,8 @@
   "main": "index.ts",
   "dependencies": {
     "expo": "~56.0.9",
+    "expo-dev-client": "~56.0.19",
+    "expo-router": "~56.2.9",
     "expo-status-bar": "~56.0.4",
     "react": "19.2.3",
     "react-native": "0.85.3"
