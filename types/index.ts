@@ -1,5 +1,6 @@
 export type UserRole = 'visitor' | 'exhibitor';
 
+
 export type Exhibition = {
   id: string;
   name: string;
@@ -7,7 +8,7 @@ export type Exhibition = {
   location: string;
   start_date: string;
   end_date: string;
-  image_url?: string;
+  color: string;
 };
 
 export type Booth = {

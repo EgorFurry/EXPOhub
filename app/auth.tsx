@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  Alert, KeyboardAvoidingView,
+  KeyboardAvoidingView,
   Platform, ScrollView,
   StyleSheet, Text,
   TouchableOpacity, View
@@ -13,6 +13,15 @@ import { supabase } from '../lib/supabase';
 import { Colors, Font, Radius } from '../styles/theme';
 import { UserRole } from '../types';
 
+// красивый toast вместо Alert
+function Toast({ message, type }: { message: string; type: 'error' | 'success' }) {
+  return (
+    <View style={[styles.toast, type === 'error' ? styles.toastError : styles.toastSuccess]}>
+      <Text style={styles.toastText}>{type === 'error' ? '❌ ' : '✅ '}{message}</Text>
+    </View>
+  );
+}
+
 export default function Auth() {
   const router = useRouter();
   const [role, setRole] = useState<UserRole>('visitor');
@@ -21,24 +30,33 @@ export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
+
+  function showToast(message: string, type: 'error' | 'success') {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  }
 
   async function signIn() {
+    if (!email || !password) { showToast('Заполните все поля', 'error'); return; }
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) Alert.alert('Ошибка', error.message);
-    else router.replace(role === 'exhibitor' ? '/exhibitor' : '/visitor');
+    if (error) showToast(error.message, 'error');
+    else router.replace(role === 'exhibitor' ? '/(tabs)' : '/(tabs)');
     setLoading(false);
   }
 
   async function signUp() {
-    if (!fullName.trim()) { Alert.alert('Ошибка', 'Введите ФИО'); return; }
+    if (!fullName.trim()) { showToast('Введите ФИО', 'error'); return; }
+    if (!email || !password) { showToast('Заполните все поля', 'error'); return; }
+    if (password.length < 6) { showToast('Пароль минимум 6 символов', 'error'); return; }
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email, password,
       options: { data: { full_name: fullName, role } }
     });
-    if (error) Alert.alert('Ошибка', error.message);
-    else Alert.alert('Готово! ✅', 'Аккаунт создан, войдите');
+    if (error) showToast(error.message, 'error');
+    else router.replace('/(tabs)');
     setLoading(false);
   }
 
@@ -47,6 +65,8 @@ export default function Auth() {
       style={styles.root}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      {toast && <Toast message={toast.message} type={toast.type} />}
+
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
 
@@ -122,7 +142,15 @@ export default function Auth() {
               />
             )}
 
-            {role === 'exhibitor' && (
+            {role === 'exhibitor' && !isLogin && (
+              <Button
+                title="Уже есть аккаунт? Войти"
+                onPress={() => setIsLogin(true)}
+                variant="secondary"
+              />
+            )}
+
+            {role === 'exhibitor' && isLogin && (
               <Button
                 title="Зарегистрироваться как экспонент"
                 onPress={() => router.push('/register-exhibitor')}
@@ -139,6 +167,13 @@ export default function Auth() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
   container: { flex: 1, padding: 28, justifyContent: 'center' },
+  toast: {
+    position: 'absolute', top: 60, left: 20, right: 20,
+    padding: 14, borderRadius: Radius.md, zIndex: 100,
+  },
+  toastError: { backgroundColor: 'rgba(196, 18, 48, 0.9)', borderWidth: 1, borderColor: Colors.primary },
+  toastSuccess: { backgroundColor: 'rgba(76, 175, 80, 0.9)', borderWidth: 1, borderColor: Colors.success },
+  toastText: { color: '#fff', fontSize: Font.sm, fontWeight: '600' },
   logoRow: { flexDirection: 'row', marginBottom: 40, alignItems: 'baseline' },
   logoRed: { fontSize: 32, fontWeight: '900', color: Colors.primary, letterSpacing: -1 },
   logoWhite: { fontSize: 32, fontWeight: '900', color: Colors.textPrimary, letterSpacing: -1 },

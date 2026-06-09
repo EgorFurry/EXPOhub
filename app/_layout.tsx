@@ -2,13 +2,16 @@ import { Stack } from 'expo-router';
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="auth" options={{ headerShown: false }} />
-      <Stack.Screen name="visitor" options={{ headerShown: false }} />
-      <Stack.Screen name="exhibitor" options={{ headerShown: false }} />
-      <Stack.Screen name="register-exhibitor" options={{ headerShown: false }} />
-      <Stack.Screen name="exhibition/[id]" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="auth" />
+      <Stack.Screen name="visitor" />
+      <Stack.Screen name="exhibitor" />
+      <Stack.Screen name="register-exhibitor" />
+      <Stack.Screen name="exhibition/[id]" />
+      <Stack.Screen name="booth/[id]" />
+      <Stack.Screen name="product/[id]" />
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="add-product" options={{ headerShown: false }} />
     </Stack>
   );
 }
