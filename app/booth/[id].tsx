@@ -7,7 +7,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator, Alert, Clipboard, Image, KeyboardAvoidingView,
-  Linking, Platform, ScrollView,
+  Linking, Modal, Platform, ScrollView,
   StyleSheet, Text, TextInput,
   TouchableOpacity, View
 } from 'react-native';
@@ -99,6 +99,7 @@ export default function BoothDetail() {
   const [analyzing, setAnalyzing]             = useState(false);
   const [toast, setToast]                     = useState<{ message: string; type: 'error' | 'success' | 'info' } | null>(null);
   const [noteData, setNoteData]               = useState<VisitorNote>(EMPTY_NOTE);
+  const [photoFullscreen, setPhotoFullscreen] = useState(false);
 
   const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
 
@@ -204,7 +205,11 @@ export default function BoothDetail() {
     catch { showToast('Ошибка записи', 'error'); }
   }
   async function stopRecording() {
-    await audioRecorder.stop(); setAudioUri(audioRecorder.uri); setIsRecording(false);
+    try {
+      const result = await audioRecorder.stop();
+      setAudioUri(result ?? null);
+    } catch { showToast('Ошибка остановки записи', 'error'); }
+    setIsRecording(false);
   }
 
   // ── сохранение ──
@@ -213,8 +218,11 @@ export default function BoothDetail() {
     if (!user) return;
     setSaving(true);
     const { error } = await supabase.from('visitor_booth_notes').upsert({
-      user_id: user.id, booth_id: id, ...noteData,
-      updated_at: new Date().toISOString(),
+      user_id: user.id,
+      booth_id: id,
+      ...noteData,
+    }, {
+      onConflict: 'user_id,booth_id',
     });
     if (error) showToast('Ошибка сохранения', 'error');
     else { setSaved(true); showToast('✅ Сохранено', 'success'); }
@@ -321,7 +329,22 @@ export default function BoothDetail() {
         {/* фото визитки + OCR */}
         <Text style={styles.sectionTitle}>ФОТО ВИЗИТКИ</Text>
         <View style={styles.photoBlock}>
-          {cardPhoto && <Image source={{ uri: cardPhoto }} style={styles.cardPhotoPreview} />}
+          {cardPhoto && (
+            <>
+              <TouchableOpacity onPress={() => setPhotoFullscreen(true)}>
+                <Image source={{ uri: cardPhoto }} style={styles.cardPhotoPreview} />
+              </TouchableOpacity>
+              <Modal visible={photoFullscreen} transparent animationType="fade">
+                <TouchableOpacity
+                  style={{ flex:1, backgroundColor:'rgba(0,0,0,0.95)', alignItems:'center', justifyContent:'center' }}
+                  onPress={() => setPhotoFullscreen(false)}
+                >
+                  <Image source={{ uri: cardPhoto }} style={{ width:'95%', height:'70%', resizeMode:'contain' }} />
+                  <Text style={{ color:'rgba(255,255,255,0.4)', marginTop:16, fontSize:12 }}>Нажми чтобы закрыть</Text>
+                </TouchableOpacity>
+              </Modal>
+            </>
+          )}
           <View style={styles.photoRow}>
             <TouchableOpacity style={styles.photoBtn} onPress={pickCardPhoto}>
               <Text style={styles.photoBtnIcon}>📷</Text>
