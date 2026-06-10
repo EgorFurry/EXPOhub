@@ -1,0 +1,605 @@
+======================================== 
+EXPOHUB PROJECT STRUCTURE 
+Generated: 10.06.2026 15:22:25,92 
+======================================== 
+ 
+[FOLDER TREE - no node_modules] 
+ 
+C:\Work\Projects\expohub-v2\.claude 
+C:\Work\Projects\expohub-v2\.expo 
+C:\Work\Projects\expohub-v2\.gitignore 
+C:\Work\Projects\expohub-v2\AGENTS.md 
+C:\Work\Projects\expohub-v2\android 
+C:\Work\Projects\expohub-v2\app 
+C:\Work\Projects\expohub-v2\app.json 
+C:\Work\Projects\expohub-v2\App.tsx 
+C:\Work\Projects\expohub-v2\assets 
+C:\Work\Projects\expohub-v2\CLAUDE.md 
+C:\Work\Projects\expohub-v2\components 
+C:\Work\Projects\expohub-v2\eas.json 
+C:\Work\Projects\expohub-v2\expo-env.d.ts 
+C:\Work\Projects\expohub-v2\hooks 
+C:\Work\Projects\expohub-v2\index.ts 
+C:\Work\Projects\expohub-v2\lib 
+C:\Work\Projects\expohub-v2\LICENSE 
+C:\Work\Projects\expohub-v2\node_modules 
+C:\Work\Projects\expohub-v2\package-lock.json 
+C:\Work\Projects\expohub-v2\package.json 
+C:\Work\Projects\expohub-v2\project_structure.txt 
+C:\Work\Projects\expohub-v2\scan_project.bat 
+C:\Work\Projects\expohub-v2\scan_project_v2.bat 
+C:\Work\Projects\expohub-v2\static 
+C:\Work\Projects\expohub-v2\styles 
+C:\Work\Projects\expohub-v2\tsconfig.json 
+C:\Work\Projects\expohub-v2\types 
+C:\Work\Projects\expohub-v2\.claude\settings.json 
+C:\Work\Projects\expohub-v2\.git\COMMIT_EDITMSG 
+C:\Work\Projects\expohub-v2\.git\config 
+C:\Work\Projects\expohub-v2\.git\description 
+C:\Work\Projects\expohub-v2\.git\HEAD 
+C:\Work\Projects\expohub-v2\.git\hooks 
+C:\Work\Projects\expohub-v2\.git\index 
+C:\Work\Projects\expohub-v2\.git\info 
+C:\Work\Projects\expohub-v2\.git\logs 
+C:\Work\Projects\expohub-v2\.git\objects 
+C:\Work\Projects\expohub-v2\.git\refs 
+C:\Work\Projects\expohub-v2\.git\hooks\applypatch-msg.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\commit-msg.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\fsmonitor-watchman.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\post-update.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\pre-applypatch.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\pre-commit.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\pre-merge-commit.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\pre-push.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\pre-rebase.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\pre-receive.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\prepare-commit-msg.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\push-to-checkout.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\sendemail-validate.sample 
+C:\Work\Projects\expohub-v2\.git\hooks\update.sample 
+C:\Work\Projects\expohub-v2\.git\info\exclude 
+C:\Work\Projects\expohub-v2\.git\logs\HEAD 
+C:\Work\Projects\expohub-v2\.git\logs\refs 
+C:\Work\Projects\expohub-v2\.git\logs\refs\heads 
+C:\Work\Projects\expohub-v2\.git\logs\refs\remotes 
+C:\Work\Projects\expohub-v2\.git\logs\refs\heads\main 
+C:\Work\Projects\expohub-v2\.git\logs\refs\remotes\origin 
+C:\Work\Projects\expohub-v2\.git\logs\refs\remotes\origin\main 
+C:\Work\Projects\expohub-v2\.git\objects\01 
+C:\Work\Projects\expohub-v2\.git\objects\03 
+C:\Work\Projects\expohub-v2\.git\objects\04 
+C:\Work\Projects\expohub-v2\.git\objects\05 
+C:\Work\Projects\expohub-v2\.git\objects\06 
+C:\Work\Projects\expohub-v2\.git\objects\0b 
+C:\Work\Projects\expohub-v2\.git\objects\0c 
+C:\Work\Projects\expohub-v2\.git\objects\0d 
+C:\Work\Projects\expohub-v2\.git\objects\0e 
+C:\Work\Projects\expohub-v2\.git\objects\14 
+C:\Work\Projects\expohub-v2\.git\objects\16 
+C:\Work\Projects\expohub-v2\.git\objects\17 
+C:\Work\Projects\expohub-v2\.git\objects\18 
+C:\Work\Projects\expohub-v2\.git\objects\1a 
+C:\Work\Projects\expohub-v2\.git\objects\1c 
+C:\Work\Projects\expohub-v2\.git\objects\1d 
+C:\Work\Projects\expohub-v2\.git\objects\1e 
+C:\Work\Projects\expohub-v2\.git\objects\20 
+C:\Work\Projects\expohub-v2\.git\objects\21 
+C:\Work\Projects\expohub-v2\.git\objects\22 
+C:\Work\Projects\expohub-v2\.git\objects\23 
+C:\Work\Projects\expohub-v2\.git\objects\24 
+C:\Work\Projects\expohub-v2\.git\objects\28 
+C:\Work\Projects\expohub-v2\.git\objects\29 
+C:\Work\Projects\expohub-v2\.git\objects\2a 
+C:\Work\Projects\expohub-v2\.git\objects\2f 
+C:\Work\Projects\expohub-v2\.git\objects\30 
+C:\Work\Projects\expohub-v2\.git\objects\36 
+C:\Work\Projects\expohub-v2\.git\objects\3a 
+C:\Work\Projects\expohub-v2\.git\objects\3b 
+C:\Work\Projects\expohub-v2\.git\objects\3c 
+C:\Work\Projects\expohub-v2\.git\objects\3d 
+C:\Work\Projects\expohub-v2\.git\objects\40 
+C:\Work\Projects\expohub-v2\.git\objects\42 
+C:\Work\Projects\expohub-v2\.git\objects\43 
+C:\Work\Projects\expohub-v2\.git\objects\44 
+C:\Work\Projects\expohub-v2\.git\objects\46 
+C:\Work\Projects\expohub-v2\.git\objects\47 
+C:\Work\Projects\expohub-v2\.git\objects\48 
+C:\Work\Projects\expohub-v2\.git\objects\49 
+C:\Work\Projects\expohub-v2\.git\objects\4d 
+C:\Work\Projects\expohub-v2\.git\objects\4e 
+C:\Work\Projects\expohub-v2\.git\objects\4f 
+C:\Work\Projects\expohub-v2\.git\objects\50 
+C:\Work\Projects\expohub-v2\.git\objects\55 
+C:\Work\Projects\expohub-v2\.git\objects\5b 
+C:\Work\Projects\expohub-v2\.git\objects\5e 
+C:\Work\Projects\expohub-v2\.git\objects\5f 
+C:\Work\Projects\expohub-v2\.git\objects\62 
+C:\Work\Projects\expohub-v2\.git\objects\63 
+C:\Work\Projects\expohub-v2\.git\objects\64 
+C:\Work\Projects\expohub-v2\.git\objects\66 
+C:\Work\Projects\expohub-v2\.git\objects\69 
+C:\Work\Projects\expohub-v2\.git\objects\6a 
+C:\Work\Projects\expohub-v2\.git\objects\6f 
+C:\Work\Projects\expohub-v2\.git\objects\71 
+C:\Work\Projects\expohub-v2\.git\objects\72 
+C:\Work\Projects\expohub-v2\.git\objects\73 
+C:\Work\Projects\expohub-v2\.git\objects\77 
+C:\Work\Projects\expohub-v2\.git\objects\78 
+C:\Work\Projects\expohub-v2\.git\objects\7c 
+C:\Work\Projects\expohub-v2\.git\objects\7e 
+C:\Work\Projects\expohub-v2\.git\objects\83 
+C:\Work\Projects\expohub-v2\.git\objects\84 
+C:\Work\Projects\expohub-v2\.git\objects\86 
+C:\Work\Projects\expohub-v2\.git\objects\88 
+C:\Work\Projects\expohub-v2\.git\objects\8a 
+C:\Work\Projects\expohub-v2\.git\objects\8b 
+C:\Work\Projects\expohub-v2\.git\objects\8d 
+C:\Work\Projects\expohub-v2\.git\objects\8e 
+C:\Work\Projects\expohub-v2\.git\objects\92 
+C:\Work\Projects\expohub-v2\.git\objects\96 
+C:\Work\Projects\expohub-v2\.git\objects\97 
+C:\Work\Projects\expohub-v2\.git\objects\9a 
+C:\Work\Projects\expohub-v2\.git\objects\9b 
+C:\Work\Projects\expohub-v2\.git\objects\9d 
+C:\Work\Projects\expohub-v2\.git\objects\9e 
+C:\Work\Projects\expohub-v2\.git\objects\a1 
+C:\Work\Projects\expohub-v2\.git\objects\a2 
+C:\Work\Projects\expohub-v2\.git\objects\a4 
+C:\Work\Projects\expohub-v2\.git\objects\a7 
+C:\Work\Projects\expohub-v2\.git\objects\a8 
+C:\Work\Projects\expohub-v2\.git\objects\a9 
+C:\Work\Projects\expohub-v2\.git\objects\aa 
+C:\Work\Projects\expohub-v2\.git\objects\ac 
+C:\Work\Projects\expohub-v2\.git\objects\ad 
+C:\Work\Projects\expohub-v2\.git\objects\af 
+C:\Work\Projects\expohub-v2\.git\objects\b2 
+C:\Work\Projects\expohub-v2\.git\objects\b3 
+C:\Work\Projects\expohub-v2\.git\objects\b5 
+C:\Work\Projects\expohub-v2\.git\objects\b6 
+C:\Work\Projects\expohub-v2\.git\objects\b7 
+C:\Work\Projects\expohub-v2\.git\objects\b9 
+C:\Work\Projects\expohub-v2\.git\objects\ba 
+C:\Work\Projects\expohub-v2\.git\objects\bb 
+C:\Work\Projects\expohub-v2\.git\objects\be 
+C:\Work\Projects\expohub-v2\.git\objects\bf 
+C:\Work\Projects\expohub-v2\.git\objects\c3 
+C:\Work\Projects\expohub-v2\.git\objects\c6 
+C:\Work\Projects\expohub-v2\.git\objects\ca 
+C:\Work\Projects\expohub-v2\.git\objects\d1 
+C:\Work\Projects\expohub-v2\.git\objects\d2 
+C:\Work\Projects\expohub-v2\.git\objects\d6 
+C:\Work\Projects\expohub-v2\.git\objects\d9 
+C:\Work\Projects\expohub-v2\.git\objects\de 
+C:\Work\Projects\expohub-v2\.git\objects\e1 
+C:\Work\Projects\expohub-v2\.git\objects\e6 
+C:\Work\Projects\expohub-v2\.git\objects\e7 
+C:\Work\Projects\expohub-v2\.git\objects\e9 
+C:\Work\Projects\expohub-v2\.git\objects\ea 
+C:\Work\Projects\expohub-v2\.git\objects\ee 
+C:\Work\Projects\expohub-v2\.git\objects\ef 
+C:\Work\Projects\expohub-v2\.git\objects\f0 
+C:\Work\Projects\expohub-v2\.git\objects\f1 
+C:\Work\Projects\expohub-v2\.git\objects\f6 
+C:\Work\Projects\expohub-v2\.git\objects\f7 
+C:\Work\Projects\expohub-v2\.git\objects\f8 
+C:\Work\Projects\expohub-v2\.git\objects\fd 
+C:\Work\Projects\expohub-v2\.git\objects\ff 
+C:\Work\Projects\expohub-v2\.git\objects\info 
+C:\Work\Projects\expohub-v2\.git\objects\pack 
+C:\Work\Projects\expohub-v2\.git\objects\01\55ea7ea75c74662443f8d590bae4a10b4fc5b2 
+C:\Work\Projects\expohub-v2\.git\objects\03\29d0c93c3a2f575e4d87faeea9b6029d400ef1 
+C:\Work\Projects\expohub-v2\.git\objects\03\d6f6b6c6727954aec1d8206222769afd178d8d 
+C:\Work\Projects\expohub-v2\.git\objects\04\0c087d5f0b4eba9d2a6dca1758751337986cf0 
+C:\Work\Projects\expohub-v2\.git\objects\05\b69ad8051970630310ee06edff07167e08b3db 
+C:\Work\Projects\expohub-v2\.git\objects\06\227ed913982852c656d87bf517c7c76d49b8f0 
+C:\Work\Projects\expohub-v2\.git\objects\0b\a36f9344abf083b8677d5334209bccf9764550 
+C:\Work\Projects\expohub-v2\.git\objects\0c\668eb514ef1f3f7f6c4a9891be3f743cf33276 
+C:\Work\Projects\expohub-v2\.git\objects\0d\04ec6687b9b5871102029999b24a834e2f9d72 
+C:\Work\Projects\expohub-v2\.git\objects\0d\af25527196521f20e410034d5e047ea03881ca 
+C:\Work\Projects\expohub-v2\.git\objects\0e\0f714ba75a1bd02330fbabad8a0de8a7da26ef 
+C:\Work\Projects\expohub-v2\.git\objects\0e\a1e8b2f8676d0397c9ee06eb6076a8fc479eea 
+C:\Work\Projects\expohub-v2\.git\objects\14\88c1b825083c3951d88baf5fe10e6db850f27e 
+C:\Work\Projects\expohub-v2\.git\objects\16\921d84d0b452ccf262c6228e422e24de48bb72 
+C:\Work\Projects\expohub-v2\.git\objects\17\6e6a5a759d0caef81821729f349bfd7b88babb 
+C:\Work\Projects\expohub-v2\.git\objects\18\69ba99c10c345db2599a23c992420a8b21debf 
+C:\Work\Projects\expohub-v2\.git\objects\18\c5885a348743f17cd55426e26d689416d43940 
+C:\Work\Projects\expohub-v2\.git\objects\18\f069efb57cf54dead28b8c4682a82f45640579 
+C:\Work\Projects\expohub-v2\.git\objects\1a\e1961b46d47386484ec55fc98e0f0306c34a87 
+C:\Work\Projects\expohub-v2\.git\objects\1c\5f22b257ac08f7d31b2add41930d552ed4ebf4 
+C:\Work\Projects\expohub-v2\.git\objects\1d\6e981ef6c4ea336e6fe8f3fbce9487221a075c 
+C:\Work\Projects\expohub-v2\.git\objects\1e\7b0935a8d5f208d94154fb97a22a98b9b93f0d 
+C:\Work\Projects\expohub-v2\.git\objects\20\fa6a072fce0480f3ac0f1d0a8e8f1c4415a708 
+C:\Work\Projects\expohub-v2\.git\objects\21\86b9888438072e43de491789d89adbd1d459be 
+C:\Work\Projects\expohub-v2\.git\objects\22\be35d4f554b1d8ecac235d5890f5927d0daadb 
+C:\Work\Projects\expohub-v2\.git\objects\23\d909e08525fc12b4f9199f78a46d456569e5bb 
+C:\Work\Projects\expohub-v2\.git\objects\24\e5f76efcf88db4e594fdeab3532abc9da22ecc 
+C:\Work\Projects\expohub-v2\.git\objects\28\4e683e14aa5a79a61036b831c7806f858ddbb6 
+C:\Work\Projects\expohub-v2\.git\objects\28\82733388e4338e9b782a27eac17f283404e0be 
+C:\Work\Projects\expohub-v2\.git\objects\28\855e456867105865b601ecde210d6b3d734d7e 
+C:\Work\Projects\expohub-v2\.git\objects\28\ee7a751eb741e278930d1ce401bb814eb84ada 
+C:\Work\Projects\expohub-v2\.git\objects\29\8e005893e76b4d3a2241194345ec2220342154 
+C:\Work\Projects\expohub-v2\.git\objects\2a\5d2fa0a3cd0ff8f5ee68ddfb119c230d049d55 
+C:\Work\Projects\expohub-v2\.git\objects\2f\4d12442e5608e8c924b10d6b44a9ef1cc8673d 
+C:\Work\Projects\expohub-v2\.git\objects\30\b20e3b5f0f470947ba9480d90587ba07c137b4 
+C:\Work\Projects\expohub-v2\.git\objects\36\3c6c6ba194984194e6cbea85caa4536d4f39f6 
+C:\Work\Projects\expohub-v2\.git\objects\3a\6013c0a0b941bb19cb2ae4ab63eef97dba145f 
+C:\Work\Projects\expohub-v2\.git\objects\3a\77f89813c10dbbed9f614a937ee143d3f3ca65 
+C:\Work\Projects\expohub-v2\.git\objects\3a\96d74eb408717c915c16df1cf4bf9f4df57c88 
+C:\Work\Projects\expohub-v2\.git\objects\3a\9e5016dca4804f37ba410ba49e70055e1ccad2 
+C:\Work\Projects\expohub-v2\.git\objects\3b\df8ec6c38d95a0188603d184b9cef9c0f9af33 
+C:\Work\Projects\expohub-v2\.git\objects\3c\e99e4c90f446f4a6b9ef153256d8362de631e0 
+C:\Work\Projects\expohub-v2\.git\objects\3d\1a0cd29249e44597d6cb4ef5fc70a85b33dcd4 
+C:\Work\Projects\expohub-v2\.git\objects\40\8bd746615785760b09e6f23fa8378d3e614331 
+C:\Work\Projects\expohub-v2\.git\objects\42\c0180ecbff7c7070e772b4d168994ed414011b 
+C:\Work\Projects\expohub-v2\.git\objects\43\c994c2d3617f947bcb5adf1933e21dabe46bb5 
+C:\Work\Projects\expohub-v2\.git\objects\44\e07e3216103840c0ca160505a8390644eeb6f1 
+C:\Work\Projects\expohub-v2\.git\objects\44\e7f36286c5c20fabb99fe56b847c2649fb3fba 
+C:\Work\Projects\expohub-v2\.git\objects\46\c778573567a2cd8276a7b72de701fe4c677649 
+C:\Work\Projects\expohub-v2\.git\objects\47\f4455e049d3c71fbb525d19d57adb46372d06b 
+C:\Work\Projects\expohub-v2\.git\objects\48\f1ce71ec6a529adb3112eb2bb7102f326266f3 
+C:\Work\Projects\expohub-v2\.git\objects\49\d54f7d0448dca04db40149ad835d1556caa7e6 
+C:\Work\Projects\expohub-v2\.git\objects\49\fb91de76dda6f3e7d8e46ff5a26a702ca2b4a0 
+C:\Work\Projects\expohub-v2\.git\objects\4d\6af19247bf850e05689f5d41d973a5de22dfa2 
+C:\Work\Projects\expohub-v2\.git\objects\4e\284523dc9b598e666b062d0367fbe3ea9cc677 
+C:\Work\Projects\expohub-v2\.git\objects\4f\782e27ef6bb9d1f7fec52f27e49d14968b6106 
+C:\Work\Projects\expohub-v2\.git\objects\4f\d18b2acdb48cc84f5275cd52eb9012709b09ad 
+C:\Work\Projects\expohub-v2\.git\objects\50\7d1460745a3d77316465c39ed522a15e699afe 
+C:\Work\Projects\expohub-v2\.git\objects\55\5fe13825bf2d93ee7d0b959cc4d44a5d47f44f 
+C:\Work\Projects\expohub-v2\.git\objects\5b\e80982723d40dffff230060542fc8a13e92e7b 
+C:\Work\Projects\expohub-v2\.git\objects\5e\3733a370686174d315d2fb053945d67e9e7374 
+C:\Work\Projects\expohub-v2\.git\objects\5f\fefc5bb57a3d7b39ec6ff4e96979226522cc49 
+C:\Work\Projects\expohub-v2\.git\objects\62\5d636845e6bd53fb214024cb15ae28be6a3840 
+C:\Work\Projects\expohub-v2\.git\objects\63\2973a9714f5f2b9c0f38957baaa211808d688a 
+C:\Work\Projects\expohub-v2\.git\objects\64\48750e45412ee19ede38f280357661854f9edb 
+C:\Work\Projects\expohub-v2\.git\objects\66\aaa8c2bc82608070c462675876da81e482ccc8 
+C:\Work\Projects\expohub-v2\.git\objects\69\44cca578928bfc68f3c4bf92cb3feb6f9522b8 
+C:\Work\Projects\expohub-v2\.git\objects\6a\765b369d660b19351b3841c9bf838e919438a7 
+C:\Work\Projects\expohub-v2\.git\objects\6a\b327a93135d9bc357042c646835fd2b757ddae 
+C:\Work\Projects\expohub-v2\.git\objects\6f\6b2acba427d0bdc3cdcba1af8864c2593ba0d4 
+C:\Work\Projects\expohub-v2\.git\objects\71\65a53c7475d846df195bc570482459d61bad67 
+C:\Work\Projects\expohub-v2\.git\objects\72\812738c8a0d01b9d0199ac51f376adc05c4221 
+C:\Work\Projects\expohub-v2\.git\objects\73\987266c7060b957d7b245f781a349a72b1668c 
+C:\Work\Projects\expohub-v2\.git\objects\77\3760a67eeb96565fbb475b019e3bf9bfc217ca 
+C:\Work\Projects\expohub-v2\.git\objects\77\484ebdbca253297baea4a7d416233aa47a45c0 
+C:\Work\Projects\expohub-v2\.git\objects\77\b626a05805e9521c26bea6a0df5c9a0812eaec 
+C:\Work\Projects\expohub-v2\.git\objects\78\cb6807c99c4cd80c35cdf2ebcfa243ec9cddf3 
+C:\Work\Projects\expohub-v2\.git\objects\7c\a0bdac525c011c2dd9f9ecf25fb63285a7204e 
+C:\Work\Projects\expohub-v2\.git\objects\7c\f131921ec49026c6cabff17c95dd94e5b17d30 
+C:\Work\Projects\expohub-v2\.git\objects\7e\219f42bffcca6464cb5401e03b2cf921009db5 
+C:\Work\Projects\expohub-v2\.git\objects\83\7c63e4140ad5dbb69cd1fabe333bf91c786227 
+C:\Work\Projects\expohub-v2\.git\objects\84\12368c37096c7dbc8fa03bdc4af5f119326925 
+C:\Work\Projects\expohub-v2\.git\objects\86\1bb0ccfd9fd38cf2310a54b8611b4792b4ad3c 
+C:\Work\Projects\expohub-v2\.git\objects\86\ec1aa13322e8cd77c169685a78ace11b4ee6ae 
+C:\Work\Projects\expohub-v2\.git\objects\88\a9e9fe5a6636da8a90bd8d0a587bbc26da6dbd 
+C:\Work\Projects\expohub-v2\.git\objects\8a\b13177ad545a753113c184986c5648675d748d 
+C:\Work\Projects\expohub-v2\.git\objects\8b\baf79b360f2f46d8fca382efb37273c7e84c2b 
+C:\Work\Projects\expohub-v2\.git\objects\8d\e7b88af9ee599410d8822168310388627d2185 
+C:\Work\Projects\expohub-v2\.git\objects\8e\ecfe78ffb56ad3c7155d6191fc508aaf539248 
+C:\Work\Projects\expohub-v2\.git\objects\92\ebdf6b52d01903be85c6b32f4576d356f71723 
+C:\Work\Projects\expohub-v2\.git\objects\96\f9fe556bc6bd7b01a24f0fc916e9db58a8415f 
+C:\Work\Projects\expohub-v2\.git\objects\97\5b69b4e9a49ded4a0fe08c298c6f77a61b16d5 
+C:\Work\Projects\expohub-v2\.git\objects\9a\012d040052d98ace74e431ec0dee344a5c7864 
+C:\Work\Projects\expohub-v2\.git\objects\9a\67a3372e7080c57615b2dffd5822e4debacc05 
+C:\Work\Projects\expohub-v2\.git\objects\9b\276639fb23956391a514e9653361e388ef2111 
+C:\Work\Projects\expohub-v2\.git\objects\9d\19bc753f03e4cd3ca408743d271bf2be2905a9 
+C:\Work\Projects\expohub-v2\.git\objects\9e\f6ec9d953db86e79594f082e85a1b892a84acf 
+C:\Work\Projects\expohub-v2\.git\objects\a1\052725dfb8ba0c2e9f220d6d3634331c4cebaa 
+C:\Work\Projects\expohub-v2\.git\objects\a2\6b4bb42ca09ce9a6460b325a2b4464ab4b2400 
+C:\Work\Projects\expohub-v2\.git\objects\a4\2bb7095ce8e7c2f0e5eb02e624f14dee2ccbda 
+C:\Work\Projects\expohub-v2\.git\objects\a7\db063785c3fcc52c8058668cd2429b50536c30 
+C:\Work\Projects\expohub-v2\.git\objects\a8\41c6daa39fdcebfd3a063f28376d3caa102f00 
+C:\Work\Projects\expohub-v2\.git\objects\a9\09cf04f9e3da07e8c8608e8bf137b9b34dd3d3 
+C:\Work\Projects\expohub-v2\.git\objects\aa\15caadae749f05a2c25965d93d168ee4847a6b 
+C:\Work\Projects\expohub-v2\.git\objects\ac\3660d744eabbc2e8e5c94b45fd061f4cf2c8ef 
+C:\Work\Projects\expohub-v2\.git\objects\ad\756d31317a3cb76a1cd95c7719225be8a3bc60 
+C:\Work\Projects\expohub-v2\.git\objects\ad\910c2c1e401b32d57c1d95153cd7613fb1eea1 
+C:\Work\Projects\expohub-v2\.git\objects\af\127e6b34492c7c0661bdb012eb81334666d6d0 
+C:\Work\Projects\expohub-v2\.git\objects\b2\9df9039414650f7144643bcb518dd24ae74184 
+C:\Work\Projects\expohub-v2\.git\objects\b3\72f37b4f4aa0d6d8b58b217e0237453a788023 
+C:\Work\Projects\expohub-v2\.git\objects\b5\e19a0175ea5f22fb45e8d13ddb2d5c7ea349a3 
+C:\Work\Projects\expohub-v2\.git\objects\b6\b966bb5c62ce3757bf1297efd73ec55b9b6a6c 
+C:\Work\Projects\expohub-v2\.git\objects\b6\fbeb4f862b53f81cc996224a9004bf0f0cd0b1 
+C:\Work\Projects\expohub-v2\.git\objects\b7\1bdacaeebb0bcea2fcef768dd2c714bea01d84 
+C:\Work\Projects\expohub-v2\.git\objects\b9\567f6052d70ca2c9035e33667fded3cc4ed71f 
+C:\Work\Projects\expohub-v2\.git\objects\ba\f1c6c32e4ed8f222c3f49b713eee1018799c7b 
+C:\Work\Projects\expohub-v2\.git\objects\bb\cdac125f694341c3b69c8fc50564a09f2d53a5 
+C:\Work\Projects\expohub-v2\.git\objects\be\ce04aa88e59205e38a6420b7707a3dad6fbadf 
+C:\Work\Projects\expohub-v2\.git\objects\bf\6c2e09f3fb9e656eaef0878dba3e0008c196cc 
+C:\Work\Projects\expohub-v2\.git\objects\c3\b6c592fc0da0193057e3498a56412b15f825cc 
+C:\Work\Projects\expohub-v2\.git\objects\c6\c0df0aa2c56a6e02c438ab888638b54fcc4dd7 
+C:\Work\Projects\expohub-v2\.git\objects\ca\6e05a7d33fd9adfd7148d07e3a359d8e8a8e14 
+C:\Work\Projects\expohub-v2\.git\objects\d1\65d56295bdec822ee69ac30b0acfd94ae9f350 
+C:\Work\Projects\expohub-v2\.git\objects\d1\ca65be843b3fac70962926b62ce3007096b824 
+C:\Work\Projects\expohub-v2\.git\objects\d2\df99b55208ef840c8341e3f51cf1fde0e89d9c 
+C:\Work\Projects\expohub-v2\.git\objects\d6\9d0d95049f6ebfa42d9c9356a0017c0e02591a 
+C:\Work\Projects\expohub-v2\.git\objects\d9\14c328fe1d7c235283f985f1679a330b40b565 
+C:\Work\Projects\expohub-v2\.git\objects\d9\37bcdb350954cd913bf4f16095bfb39d12bc18 
+C:\Work\Projects\expohub-v2\.git\objects\de\9887562c8fcedf26d221e7a301f3f12a5a85fd 
+C:\Work\Projects\expohub-v2\.git\objects\e1\c24d6acf920d92ea4226a4e03e231f867eb0d0 
+C:\Work\Projects\expohub-v2\.git\objects\e6\7ac8118d8251616cc89b1440d2aea399c5356e 
+C:\Work\Projects\expohub-v2\.git\objects\e7\950edbfc3d2853f36fcb08f35e3df3ba3e45ec 
+C:\Work\Projects\expohub-v2\.git\objects\e7\b103e409c211d8b4d9e350c33b4f167d4eed52 
+C:\Work\Projects\expohub-v2\.git\objects\e9\d80fffe3d52cf1fd850311ac66d7faf539ed54 
+C:\Work\Projects\expohub-v2\.git\objects\e9\f307ec581412ec55a2efc53721a13c2e2d3a55 
+C:\Work\Projects\expohub-v2\.git\objects\ea\519479df137ecfc6b22c5395a9f4899931ad18 
+C:\Work\Projects\expohub-v2\.git\objects\ea\ea9de62a4099851595dad9ede6bcdbfa37bd55 
+C:\Work\Projects\expohub-v2\.git\objects\ee\b950a4c99a4ff03ca30d1c3417145470c504c9 
+C:\Work\Projects\expohub-v2\.git\objects\ef\814220be7bff5d4977b9f3da43aebdc5057307 
+C:\Work\Projects\expohub-v2\.git\objects\f0\ba9353598f0438ac708610b8edce3a66ac776f 
+C:\Work\Projects\expohub-v2\.git\objects\f1\f0deb2df4955dd14428f10e5d15d98711583cf 
+C:\Work\Projects\expohub-v2\.git\objects\f1\fd26f455cff96a82a55ee30152dce2ba713147 
+C:\Work\Projects\expohub-v2\.git\objects\f6\e2e929fb86c4a56717efc1542e957a6969a047 
+C:\Work\Projects\expohub-v2\.git\objects\f7\10c66f7c1953d55d03d899afc1a70747795ae7 
+C:\Work\Projects\expohub-v2\.git\objects\f7\860ff46caa27d204e2b8217d8321eea7879fe1 
+C:\Work\Projects\expohub-v2\.git\objects\f8\22741d3af0d1428a57277777d5fa8928056fb3 
+C:\Work\Projects\expohub-v2\.git\objects\fd\8a02c089d55c2e2776664099015c1c55717caf 
+C:\Work\Projects\expohub-v2\.git\objects\fd\ed02f7919781af3705bcce49950e6273e10b1c 
+C:\Work\Projects\expohub-v2\.git\objects\ff\2438ab438f4e0152165066b4b2bafa705d4c1f 
+C:\Work\Projects\expohub-v2\.git\refs\heads 
+C:\Work\Projects\expohub-v2\.git\refs\remotes 
+C:\Work\Projects\expohub-v2\.git\refs\tags 
+C:\Work\Projects\expohub-v2\.git\refs\heads\main 
+C:\Work\Projects\expohub-v2\.git\refs\remotes\origin 
+C:\Work\Projects\expohub-v2\.git\refs\remotes\origin\main 
+C:\Work\Projects\expohub-v2\android\.gitignore 
+C:\Work\Projects\expohub-v2\android\.gradle 
+C:\Work\Projects\expohub-v2\android\.kotlin 
+C:\Work\Projects\expohub-v2\android\app 
+C:\Work\Projects\expohub-v2\android\build 
+C:\Work\Projects\expohub-v2\android\build.gradle 
+C:\Work\Projects\expohub-v2\android\gradle 
+C:\Work\Projects\expohub-v2\android\gradle.properties 
+C:\Work\Projects\expohub-v2\android\gradlew 
+C:\Work\Projects\expohub-v2\android\gradlew.bat 
+C:\Work\Projects\expohub-v2\android\local.properties 
+C:\Work\Projects\expohub-v2\android\settings.gradle 
+C:\Work\Projects\expohub-v2\android\app\.cxx 
+C:\Work\Projects\expohub-v2\android\app\build 
+C:\Work\Projects\expohub-v2\android\app\build.gradle 
+C:\Work\Projects\expohub-v2\android\app\debug.keystore 
+C:\Work\Projects\expohub-v2\android\app\proguard-rules.pro 
+C:\Work\Projects\expohub-v2\android\app\src 
+C:\Work\Projects\expohub-v2\android\app\src\debug 
+C:\Work\Projects\expohub-v2\android\app\src\debugOptimized 
+C:\Work\Projects\expohub-v2\android\app\src\main 
+C:\Work\Projects\expohub-v2\android\app\src\debug\AndroidManifest.xml 
+C:\Work\Projects\expohub-v2\android\app\src\debugOptimized\AndroidManifest.xml 
+C:\Work\Projects\expohub-v2\android\app\src\main\AndroidManifest.xml 
+C:\Work\Projects\expohub-v2\android\app\src\main\java 
+C:\Work\Projects\expohub-v2\android\app\src\main\res 
+C:\Work\Projects\expohub-v2\android\app\src\main\java\com 
+C:\Work\Projects\expohub-v2\android\app\src\main\java\com\expohub 
+C:\Work\Projects\expohub-v2\android\app\src\main\java\com\expohub\app 
+C:\Work\Projects\expohub-v2\android\app\src\main\java\com\expohub\app\MainActivity.kt 
+C:\Work\Projects\expohub-v2\android\app\src\main\java\com\expohub\app\MainApplication.kt 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-hdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-mdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-xhdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-xxhdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-xxxhdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-anydpi-v26 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-hdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-mdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xhdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xxhdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xxxhdpi 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\values 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\values-night 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable\ic_launcher_background.xml 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable\rn_edit_text_material.xml 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-hdpi\splashscreen_logo.png 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-mdpi\splashscreen_logo.png 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-xhdpi\splashscreen_logo.png 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-xxhdpi\splashscreen_logo.png 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\drawable-xxxhdpi\splashscreen_logo.png 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-anydpi-v26\ic_launcher.xml 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-anydpi-v26\ic_launcher_round.xml 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-hdpi\ic_launcher.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-hdpi\ic_launcher_foreground.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-hdpi\ic_launcher_round.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-mdpi\ic_launcher.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-mdpi\ic_launcher_foreground.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-mdpi\ic_launcher_round.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xhdpi\ic_launcher.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xhdpi\ic_launcher_foreground.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xhdpi\ic_launcher_round.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xxhdpi\ic_launcher.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xxhdpi\ic_launcher_foreground.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xxhdpi\ic_launcher_round.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xxxhdpi\ic_launcher.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xxxhdpi\ic_launcher_foreground.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\mipmap-xxxhdpi\ic_launcher_round.webp 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\values\colors.xml 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\values\strings.xml 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\values\styles.xml 
+C:\Work\Projects\expohub-v2\android\app\src\main\res\values-night\colors.xml 
+C:\Work\Projects\expohub-v2\android\gradle\wrapper 
+C:\Work\Projects\expohub-v2\android\gradle\wrapper\gradle-wrapper.jar 
+C:\Work\Projects\expohub-v2\android\gradle\wrapper\gradle-wrapper.properties 
+C:\Work\Projects\expohub-v2\app\(tabs) 
+C:\Work\Projects\expohub-v2\app\add-product.tsx 
+C:\Work\Projects\expohub-v2\app\auth.tsx 
+C:\Work\Projects\expohub-v2\app\booth 
+C:\Work\Projects\expohub-v2\app\edit-product 
+C:\Work\Projects\expohub-v2\app\exhibition 
+C:\Work\Projects\expohub-v2\app\exhibitor.tsx 
+C:\Work\Projects\expohub-v2\app\index.tsx 
+C:\Work\Projects\expohub-v2\app\product 
+C:\Work\Projects\expohub-v2\app\register-exhibitor.tsx 
+C:\Work\Projects\expohub-v2\app\visitor.tsx 
+C:\Work\Projects\expohub-v2\app\_layout.tsx 
+C:\Work\Projects\expohub-v2\app\(tabs)\analytics.tsx 
+C:\Work\Projects\expohub-v2\app\(tabs)\index.tsx 
+C:\Work\Projects\expohub-v2\app\(tabs)\map.tsx 
+C:\Work\Projects\expohub-v2\app\(tabs)\profile.tsx 
+C:\Work\Projects\expohub-v2\app\(tabs)\ticket.tsx 
+C:\Work\Projects\expohub-v2\app\(tabs)\_layout.tsx 
+C:\Work\Projects\expohub-v2\app\booth\[id].tsx 
+C:\Work\Projects\expohub-v2\app\edit-product\[id].tsx 
+C:\Work\Projects\expohub-v2\app\exhibition\[id].tsx 
+C:\Work\Projects\expohub-v2\app\product\[id].tsx 
+C:\Work\Projects\expohub-v2\assets\android-icon-background.png 
+C:\Work\Projects\expohub-v2\assets\android-icon-foreground.png 
+C:\Work\Projects\expohub-v2\assets\android-icon-monochrome.png 
+C:\Work\Projects\expohub-v2\assets\favicon.png 
+C:\Work\Projects\expohub-v2\assets\icon.png 
+C:\Work\Projects\expohub-v2\assets\splash-icon.png 
+C:\Work\Projects\expohub-v2\components\shared 
+C:\Work\Projects\expohub-v2\components\ui 
+C:\Work\Projects\expohub-v2\components\shared\GlowBackground.tsx 
+C:\Work\Projects\expohub-v2\components\ui\Button.tsx 
+C:\Work\Projects\expohub-v2\components\ui\Input.tsx 
+C:\Work\Projects\expohub-v2\hooks\useTheme.ts 
+C:\Work\Projects\expohub-v2\lib\config.ts 
+C:\Work\Projects\expohub-v2\lib\supabase.ts 
+C:\Work\Projects\expohub-v2\static\photo_2026-06-10_00-30-31.png 
+C:\Work\Projects\expohub-v2\styles\theme.ts 
+C:\Work\Projects\expohub-v2\types\index.ts 
+ 
+======================================== 
+[KEY CONFIG FILES] 
+======================================== 
+ 
+--- package.json --- 
+{
+  "name": "expohub-v2",
+  "version": "1.0.0",
+  "main": "App.tsx",
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@supabase/supabase-js": "^2.106.1",
+    "expo": "~56.0.9",
+    "expo-audio": "~56.0.11",
+    "expo-blur": "~56.0.3",
+    "expo-camera": "~56.0.7",
+    "expo-constants": "~56.0.17",
+    "expo-dev-client": "~56.0.19",
+    "expo-file-system": "~56.0.7",
+    "expo-image-picker": "~56.0.16",
+    "expo-linking": "~56.0.13",
+    "expo-router": "~56.2.9",
+    "expo-sharing": "~56.0.16",
+    "expo-splash-screen": "~56.0.10",
+    "expo-status-bar": "~56.0.4",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-native": "0.85.3",
+    "react-native-gesture-handler": "~2.31.1",
+    "react-native-reanimated": "4.3.1",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "4.25.2",
+    "react-native-webview": "13.16.1",
+    "react-native-worklets": "0.8.3"
+  },
+  "devDependencies": {
+    "@expo/ngrok": "^4.1.3",
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
+  },
+  "private": true
+}
+ 
+--- app.json --- 
+{
+  "expo": {
+    "name": "ExpoHub",
+    "slug": "expohub",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "expohub",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0B0B12"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "softwareKeyboardLayoutMode": "pan",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundColor": "#C41230"
+      },
+      "package": "com.expohub.app"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sharing",
+      "expo-audio"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f65bfcbd-3efa-4abf-8622-983cc3083567"
+      }
+    },
+    "owner": "egorfurrys-organization"
+  }
+}
+ 
+--- tsconfig.json --- 
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
+}
+ 
+--- eas.json --- 
+{
+  "cli": {
+    "version": ">= 20.1.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+} 
+--- AGENTS.md --- 
+# Expo HAS CHANGED
+
+Read the exact versioned docs at https://docs.expo.dev/versions/v56.0.0/ before writing any code.
+ 
+--- CLAUDE.md --- 
+@AGENTS.md
+ 
+======================================== 
+[SOURCE CODE - .ts .tsx files, no node_modules] 
+======================================== 
+ 
+======================================== 
+[SQL FILES] 
+======================================== 
