@@ -1,7 +1,11 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AudioModule, RecordingPresets, useAudioRecorder } from 'expo-audio';
+import * as FileSystem from 'expo-file-system/legacy';
+import * as ImagePicker from 'expo-image-picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-  ActivityIndicator, KeyboardAvoidingView,
+  ActivityIndicator, Image, KeyboardAvoidingView,
   Platform, ScrollView,
   StyleSheet, Text, TextInput,
   TouchableOpacity, View
@@ -50,9 +54,14 @@ export default function BoothDetail() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [cardPhoto, setCardPhoto] = useState<string | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioUri, setAudioUri] = useState<string | null>(null);
   const [noteData, setNoteData] = useState<VisitorNote>({
     contact_name: '', contact_phone: '', contact_email: '', note: '', rating: 0,
   });
+
+  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
 
   useEffect(() => { fetchData(); }, [id]);
 
@@ -81,6 +90,12 @@ export default function BoothDetail() {
       }
       if (vpRes.data) setVisitorProducts(vpRes.data);
     }
+    // загружаем сохранённое фото
+    const savedPhoto = await AsyncStorage.getItem(`booth_photo_${id}`);
+    if (savedPhoto) {
+      const info = await FileSystem.getInfoAsync(savedPhoto);
+      if (info.exists) setCardPhoto(savedPhoto);
+    }
     setLoading(false);
   }
 
@@ -99,6 +114,44 @@ export default function BoothDetail() {
   async function deleteProduct(productId: string) {
     await supabase.from('visitor_products').delete().eq('id', productId);
     setVisitorProducts(p => p.filter(vp => vp.id !== productId));
+  }
+
+  async function savePhotoLocally(uri: string) {
+    const boothDir = `${FileSystem.documentDirectory}booths/${id}/`;
+    await FileSystem.makeDirectoryAsync(boothDir, { intermediates: true });
+    const filename = `card_${Date.now()}.jpg`;
+    const dest = boothDir + filename;
+    await FileSystem.copyAsync({ from: uri, to: dest });
+    setCardPhoto(dest);
+    await AsyncStorage.setItem(`booth_photo_${id}`, dest);
+  }
+
+  async function pickCardPhoto() {
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permission.granted) return;
+    const result = await ImagePicker.launchCameraAsync({ quality: 0.7 });
+    if (!result.canceled && result.assets[0]) await savePhotoLocally(result.assets[0].uri);
+  }
+
+  async function pickFromGallery() {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) return;
+    const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.7 });
+    if (!result.canceled && result.assets[0]) await savePhotoLocally(result.assets[0].uri);
+  }
+
+  async function startRecording() {
+    try {
+      await AudioModule.requestRecordingPermissionsAsync();
+      await audioRecorder.record();
+      setIsRecording(true);
+    } catch (e) { console.error('recording error:', e); }
+  }
+
+  async function stopRecording() {
+    await audioRecorder.stop();
+    setAudioUri(audioRecorder.uri);
+    setIsRecording(false);
   }
 
   if (loading) return (
@@ -136,6 +189,50 @@ export default function BoothDetail() {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={styles.body}>
+
+        <Text style={styles.sectionTitle}>📸 ФОТО ВИЗИТКИ</Text>
+        <View style={styles.photoBlock}>
+          {cardPhoto && <Image source={{ uri: cardPhoto }} style={styles.cardPhotoPreview} />}
+          <View style={styles.photoRow}>
+            <TouchableOpacity style={styles.photoBtn} onPress={pickCardPhoto}>
+              <Text style={styles.photoBtnIcon}>📷</Text>
+              <Text style={styles.photoBtnText}>Камера</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.photoBtn} onPress={pickFromGallery}>
+              <Text style={styles.photoBtnIcon}>🖼️</Text>
+              <Text style={styles.photoBtnText}>Галерея</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Text style={styles.sectionTitle}>🎙️ АУДИО ЗАМЕТКА</Text>
+        <View style={styles.audioBlock}>
+          {!isRecording && !audioUri && (
+            <TouchableOpacity style={styles.recordBtn} onPress={startRecording}>
+              <Text style={styles.recordBtnIcon}>🎙️</Text>
+              <Text style={styles.recordBtnText}>Начать запись</Text>
+            </TouchableOpacity>
+          )}
+          {isRecording && (
+            <TouchableOpacity style={[styles.recordBtn, styles.recordBtnActive]} onPress={stopRecording}>
+              <Text style={styles.recordBtnIcon}>⏹️</Text>
+              <Text style={styles.recordBtnText}>Остановить</Text>
+            </TouchableOpacity>
+          )}
+          {audioUri && !isRecording && (
+            <View style={styles.audioRow}>
+              <View style={styles.audioRecorded}>
+                <Text style={styles.audioRecordedText}>🎙️ Запись сохранена</Text>
+              </View>
+              <TouchableOpacity style={styles.recordBtn} onPress={startRecording}>
+                <Text style={styles.recordBtnText}>🔄 Перезаписать</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.deleteAudioBtn} onPress={() => setAudioUri(null)}>
+                <Text style={styles.deleteAudioText}>✕ Удалить</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
 
         <Text style={styles.sectionTitle}>ОЦЕНКА СТЕНДА</Text>
         <View style={styles.stars}>
@@ -183,7 +280,11 @@ export default function BoothDetail() {
 
         <Text style={styles.sectionTitle}>МОИ НАХОДКИ</Text>
         {visitorProducts.map(vp => (
-          <View key={vp.id} style={styles.myProductCard}>
+          <TouchableOpacity
+            key={vp.id}
+            style={styles.myProductCard}
+            onPress={() => router.push(`/product/${vp.id}` as any)}
+          >
             <View style={styles.productIcon}><Text style={{ fontSize: 20 }}>🛋️</Text></View>
             <View style={{ flex: 1 }}>
               <Text style={styles.productName}>{vp.name}</Text>
@@ -194,12 +295,12 @@ export default function BoothDetail() {
             <TouchableOpacity onPress={() => deleteProduct(vp.id)} style={styles.deleteBtn}>
               <Text style={styles.deleteBtnText}>✕</Text>
             </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         ))}
 
         <TouchableOpacity
           style={styles.addProductBlock}
-          onPress={() => router.push(`/add-product?booth_id=${id}&booth_name=${booth?.company_name}`)}
+          onPress={() => router.push(`/add-product?booth_id=${id}&booth_name=${booth?.company_name}` as any)}
         >
           <Text style={styles.addProductIcon}>+</Text>
           <Text style={styles.addProductText}>Добавить товар</Text>
@@ -233,6 +334,22 @@ const styles = StyleSheet.create({
   tagText: { color: Colors.primary, fontSize: Font.xs, fontWeight: '600' },
   body: { padding: 20, paddingBottom: 40 },
   sectionTitle: { fontSize: Font.xs, color: Colors.textMuted, letterSpacing: 2, fontWeight: '700', marginBottom: 10, marginTop: 16 },
+  photoBlock: { backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md, padding: 12, gap: 10 },
+  cardPhotoPreview: { width: '100%', height: 150, borderRadius: Radius.sm, resizeMode: 'cover' },
+  photoRow: { flexDirection: 'row', gap: 10 },
+  photoBtn: { flex: 1, backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primaryBorder, borderRadius: Radius.md, paddingVertical: 12, alignItems: 'center', gap: 4 },
+  photoBtnIcon: { fontSize: 20 },
+  photoBtnText: { fontSize: Font.xs, color: Colors.primary, fontWeight: '700' },
+  audioBlock: { backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md, padding: 12, gap: 8 },
+  recordBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 12, borderRadius: Radius.md, backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primaryBorder },
+  recordBtnActive: { backgroundColor: 'rgba(196,18,48,0.3)', borderColor: Colors.primary },
+  recordBtnIcon: { fontSize: 20 },
+  recordBtnText: { fontSize: Font.sm, color: Colors.primary, fontWeight: '700' },
+  audioRow: { gap: 8 },
+  audioRecorded: { paddingVertical: 12, borderRadius: Radius.md, backgroundColor: 'rgba(76,175,80,0.15)', borderWidth: 1, borderColor: 'rgba(76,175,80,0.3)', alignItems: 'center' },
+  audioRecordedText: { color: '#4CAF50', fontSize: Font.sm, fontWeight: '600' },
+  deleteAudioBtn: { paddingVertical: 10, borderRadius: Radius.md, backgroundColor: 'rgba(196,18,48,0.1)', borderWidth: 1, borderColor: Colors.primaryBorder, alignItems: 'center' },
+  deleteAudioText: { color: Colors.primary, fontSize: Font.xs, fontWeight: '600' },
   stars: { flexDirection: 'row', gap: 8 },
   star: { fontSize: 32, color: Colors.border },
   starActive: { color: Colors.primary },

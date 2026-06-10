@@ -11,6 +11,7 @@ export default function RootLayout() {
       <Stack.Screen name="booth/[id]" />
       <Stack.Screen name="product/[id]" />
       <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="edit-product/[id]" options={{ headerShown: false }} />
       <Stack.Screen name="add-product" options={{ headerShown: false }} />
     </Stack>
   );

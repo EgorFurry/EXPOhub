@@ -93,19 +93,25 @@ export default function ExhibitionDetail() {
       </View>
 
       {/* фильтры по залам */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.halls} contentContainerStyle={{ alignItems: 'center', paddingVertical: 8 }}>
-        {halls.map(hall => (
-          <TouchableOpacity
-            key={hall}
-            style={[styles.hallChip, activeHall === hall && styles.hallChipActive]}
-            onPress={() => setActiveHall(hall)}
-          >
-            <Text style={[styles.hallChipText, activeHall === hall && styles.hallChipTextActive]}>
-              {hall}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <View style={{ height: 50, marginTop: 8 }}>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 20, alignItems: 'center', height: 50 }}
+        >
+          {halls.map(hall => (
+            <TouchableOpacity
+              key={hall}
+              style={[styles.hallChip, activeHall === hall && styles.hallChipActive]}
+              onPress={() => setActiveHall(hall)}
+            >
+              <Text style={{ fontSize: 12, color: activeHall === hall ? Colors.primary : '#ffffff', fontWeight: '600' }}>
+                {hall}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
       {/* список стендов */}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.list}>
@@ -156,19 +162,25 @@ const styles = StyleSheet.create({
   headerMeta: { fontSize: Font.xs, color: Colors.textMuted, marginTop: 2 },
   searchWrap: { paddingHorizontal: 20, paddingTop: 14 },
   search: { backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md, padding: 12, fontSize: Font.sm, color: Colors.textPrimary },
-  halls: { paddingHorizontal: 20, marginTop: 8, marginBottom: 0, maxHeight: 44 },
-  hallChip: { 
+  halls: { paddingHorizontal: 20, marginTop: 8, marginBottom: 4 },  hallChip: { 
     paddingHorizontal: 14, 
-    paddingVertical: 6, 
+    paddingVertical: 8, 
     borderRadius: Radius.full, 
     borderWidth: 1, 
     borderColor: Colors.border, 
     marginRight: 8,
-    height: 32,
-    alignSelf: 'flex-start',
+    flexShrink: 0,
+    backgroundColor: Colors.surface,
+    minWidth: 60,
   },hallChipActive: { backgroundColor: Colors.primaryLight, borderColor: Colors.primary },
-  hallChipText: { fontSize: Font.xs, color: Colors.textMuted, fontWeight: '600' },
-  hallChipTextActive: { color: Colors.primary },
+  hallChipText: { 
+    fontSize: 12, 
+    color: '#ffffff', 
+    fontWeight: '600',
+  },
+  hallChipTextActive: { 
+    color: '#C41230' 
+  },
   list: { padding: 20, paddingTop: 12, gap: 10 },
   empty: { color: Colors.textMuted, textAlign: 'center', marginTop: 40 },
   boothCard: { backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md, padding: 14 },
