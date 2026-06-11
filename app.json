@@ -7,16 +7,33 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "scheme": "expohub",
+    "assetBundlePatterns": [
+      "**/*",
+      "assets/maps/*"
+    ],
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#0B0B12"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Приложение использует микрофон для записи голосовых заметок о стендах и товарах.",
+        "NSCameraUsageDescription": "Приложение использует камеру для фото визиток и товаров на выставке.",
+        "NSPhotoLibraryUsageDescription": "Приложение использует галерею для добавления фото к карточкам."
+      }
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundColor": "#C41230"
@@ -26,7 +43,20 @@
     "plugins": [
       "expo-router",
       "expo-sharing",
-      "expo-audio"
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Приложение использует микрофон для записи голосовых заметок."
+        }
+      ],
+      "expo-asset",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Приложение использует галерею для добавления фото к карточкам.",
+          "cameraPermission": "Приложение использует камеру для фото визиток и товаров."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

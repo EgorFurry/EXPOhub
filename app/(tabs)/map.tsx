@@ -414,10 +414,23 @@ export default function MapScreen() {
         </ScrollView>
       )}
 
-      <WebView ref={webViewRef} style={styles.webview} originWhitelist={['*']}
-        source={{ html: htmlContent }} onMessage={handleWebViewMessage}
-        javaScriptEnabled domStorageEnabled scrollEnabled={false}
-        bounces={false} overScrollMode="never" mixedContentMode="always" allowFileAccess />
+      <WebView
+        key={planBase64.length > 0 ? 'loaded' : 'empty'}
+        ref={webViewRef}
+        style={styles.webview}
+        originWhitelist={['*']}
+        source={{ html: htmlContent }}
+        onMessage={handleWebViewMessage}
+        javaScriptEnabled
+        domStorageEnabled
+        scrollEnabled={false}
+        bounces={false}
+        overScrollMode="never"
+        mixedContentMode="always"
+        allowFileAccess
+        allowFileAccessFromFileURLs
+        allowUniversalAccessFromFileURLs
+      />
 
       {selectedBooth && (
         <View style={styles.selectedCard}>

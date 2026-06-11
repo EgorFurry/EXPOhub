@@ -1,9 +1,9 @@
-
-import * as FileSystem from 'expo-file-system/legacy';import { AudioModule, RecordingPresets, useAudioRecorder } from 'expo-audio';
+import * as FileSystem from 'expo-file-system/legacy';
+import { AudioModule, RecordingPresets, useAudioRecorder } from 'expo-audio';
 import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import {
   ActivityIndicator, Image, KeyboardAvoidingView, Modal,
   Platform, ScrollView, StyleSheet,
@@ -15,10 +15,8 @@ import { supabase } from '../lib/supabase';
 import { Colors, Font, Radius } from '../styles/theme';
 
 const CATEGORIES = ['Мебель', 'Освещение', 'Декор', 'Текстиль', 'Кухня', 'Спальня', 'Офис', 'Другое'];
-
 const EMPTY = { name: '', price: '', category: '', characteristics: '', logistics: '', note: '', rating: 0 };
 
-// ─── SVG иконки ───────────────────────────────────────────────
 function IconMic({ recording }: { recording: boolean }) {
   return (
     <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
@@ -39,50 +37,27 @@ function IconShare() {
   );
 }
 
-// ─── компонент поля с микрофоном ──────────────────────────────
 type FieldWithMicProps = {
-  label: string;
-  placeholder: string;
-  value: string;
+  label: string; placeholder: string; value: string;
   onChangeText: (v: string) => void;
-  audioUri: string | null;
-  isRecording: boolean;
-  onStartRecording: () => void;
-  onStopRecording: () => void;
-  onDeleteAudio: () => void;
+  audioUri: string | null; isRecording: boolean;
+  onStartRecording: () => void; onStopRecording: () => void; onDeleteAudio: () => void;
 };
 
-function FieldWithMic({
-  label, placeholder, value, onChangeText,
-  audioUri, isRecording, onStartRecording, onStopRecording, onDeleteAudio,
-}: FieldWithMicProps) {
+function FieldWithMic({ label, placeholder, value, onChangeText, audioUri, isRecording, onStartRecording, onStopRecording, onDeleteAudio }: FieldWithMicProps) {
   return (
     <View style={styles.field}>
       <Text style={styles.fieldLabel}>{label}</Text>
       <View style={styles.micFieldWrap}>
-        <TextInput
-          style={[styles.fieldInput, styles.multiline, { paddingBottom: 36 }]}
-          placeholder={placeholder}
-          placeholderTextColor={Colors.textMuted}
-          value={value}
-          onChangeText={onChangeText}
-          multiline
-        />
-        {/* микрофон в правый нижний угол */}
-        <TouchableOpacity
-          style={[styles.micBtn, isRecording && styles.micBtnActive]}
-          onPress={isRecording ? onStopRecording : onStartRecording}
-        >
+        <TextInput style={[styles.fieldInput, styles.multiline, { paddingBottom: 36 }]} placeholder={placeholder} placeholderTextColor={Colors.textMuted} value={value} onChangeText={onChangeText} multiline />
+        <TouchableOpacity style={[styles.micBtn, isRecording && styles.micBtnActive]} onPress={isRecording ? onStopRecording : onStartRecording}>
           <IconMic recording={isRecording} />
         </TouchableOpacity>
       </View>
-      {/* статус аудио */}
       {audioUri && !isRecording && (
         <View style={styles.audioStatus}>
           <Text style={styles.audioStatusText}>🎙️ Аудио записано</Text>
-          <TouchableOpacity onPress={onDeleteAudio}>
-            <Text style={styles.audioDeleteBtn}>✕ Удалить</Text>
-          </TouchableOpacity>
+          <TouchableOpacity onPress={onDeleteAudio}><Text style={styles.audioDeleteBtn}>✕ Удалить</Text></TouchableOpacity>
         </View>
       )}
       {isRecording && (
@@ -95,27 +70,24 @@ function FieldWithMic({
   );
 }
 
-// ─── главный компонент ───────────────────────────────────────
 export default function AddProduct() {
   const { booth_id, booth_name } = useLocalSearchParams();
   const router = useRouter();
 
-  const [form, setForm]             = useState(EMPTY);
-  const [mainImage, setMainImage]   = useState<string | null>(null);
+  const [form, setForm]               = useState(EMPTY);
+  const [mainImage, setMainImage]     = useState<string | null>(null);
   const [mediaImages, setMediaImages] = useState<string[]>([]);
-  const [saving, setSaving]         = useState(false);
-  const [saved, setSaved]           = useState(false);
-  const [savedId, setSavedId]       = useState<string | null>(null);
-  const [analyzing, setAnalyzing]   = useState(false);
+  const [saving, setSaving]           = useState(false);
+  const [saved, setSaved]             = useState(false);
+  const [analyzing, setAnalyzing]     = useState(false);
   const [showCatPicker, setShowCatPicker] = useState(false);
-  const [toast, setToast]           = useState<{ text: string; type: 'ok' | 'err' } | null>(null);
+  const [toast, setToast]             = useState<{ text: string; type: 'ok' | 'err' } | null>(null);
+  const [viewingPhoto, setViewingPhoto] = useState<string | null>(null);
 
-  // аудио для характеристик
   const [charAudioUri, setCharAudioUri]   = useState<string | null>(null);
   const [charRecording, setCharRecording] = useState(false);
   const charRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
 
-  // аудио для комментария
   const [noteAudioUri, setNoteAudioUri]   = useState<string | null>(null);
   const [noteRecording, setNoteRecording] = useState(false);
   const noteRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
@@ -125,29 +97,22 @@ export default function AddProduct() {
     setTimeout(() => setToast(null), 3000);
   }
 
-  // ── OCR фото ──
   async function pickMainImage(fromCamera = false) {
-    const perm = fromCamera
-      ? await ImagePicker.requestCameraPermissionsAsync()
-      : await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const perm = fromCamera ? await ImagePicker.requestCameraPermissionsAsync() : await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!perm.granted) { showToast('Нет доступа', 'err'); return; }
-
     const result = fromCamera
       ? await ImagePicker.launchCameraAsync({ base64: true, quality: 0.7 })
       : await ImagePicker.launchImageLibraryAsync({ base64: true, quality: 0.7 });
-
     if (!result.canceled && result.assets[0]) {
       setMainImage(result.assets[0].uri);
-      await analyzeWithClaude(result.assets[0].base64!);
+      if (result.assets[0].base64) await analyzeWithClaude(result.assets[0].base64);
     }
   }
 
   async function analyzeWithClaude(base64: string) {
     setAnalyzing(true);
     try {
-      const { data, error } = await supabase.functions.invoke('analyze-image', {
-        body: { base64, mediaType: 'image/jpeg', mode: 'product' },
-      });
+      const { data, error } = await supabase.functions.invoke('analyze-image', { body: { base64, mediaType: 'image/jpeg', mode: 'product' } });
       if (error) throw error;
       const parsed = JSON.parse(data.result.replace(/```json|```/g, '').trim());
       setForm(p => ({
@@ -160,101 +125,82 @@ export default function AddProduct() {
         note:            parsed.note            || p.note,
       }));
       showToast('✅ Данные извлечены из фото', 'ok');
-    } catch {
-      showToast('Не удалось распознать фото', 'err');
-    }
+    } catch { showToast('Не удалось распознать фото', 'err'); }
     setAnalyzing(false);
   }
 
-  // ── медиафайлы ──
   async function addMediaPhoto(fromCamera = false) {
-    const perm = fromCamera
-      ? await ImagePicker.requestCameraPermissionsAsync()
-      : await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const perm = fromCamera ? await ImagePicker.requestCameraPermissionsAsync() : await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!perm.granted) { showToast('Нет доступа', 'err'); return; }
-
     const result = fromCamera
-      ? await ImagePicker.launchCameraAsync({ quality: 0.8, allowsMultipleSelection: false })
+      ? await ImagePicker.launchCameraAsync({ quality: 0.8 })
       : await ImagePicker.launchImageLibraryAsync({ quality: 0.8, allowsMultipleSelection: true });
-
     if (!result.canceled) {
       const uris = result.assets.map(a => a.uri);
-      setMediaImages(prev => [...prev, ...uris].slice(0, 6)); // макс 6 фото
+      setMediaImages(prev => [...prev, ...uris].slice(0, 10));
     }
   }
 
-  function removeMedia(uri: string) {
-    setMediaImages(prev => prev.filter(u => u !== uri));
-  }
+  function removeMedia(uri: string) { setMediaImages(prev => prev.filter(u => u !== uri)); }
 
-  // ── аудио: характеристики ──
   async function startCharRecording() {
     try {
-      await AudioModule.requestRecordingPermissionsAsync();
+      const perm = await AudioModule.requestRecordingPermissionsAsync();
+      console.log('MIC PERM:', JSON.stringify(perm));
+      if (!perm.granted) { showToast('Нет доступа к микрофону', 'err'); return; }
       await charRecorder.record();
       setCharRecording(true);
-    } catch { showToast('Ошибка записи', 'err'); }
+      console.log('RECORDING STARTED');
+    } catch (e) {
+      console.log('MIC ERROR:', String(e));
+      showToast('Ошибка: ' + String(e), 'err');
+    }
   }
   async function stopCharRecording() {
-    await charRecorder.stop();
-    setCharAudioUri(charRecorder.uri);
+    try { const result = await charRecorder.stop(); setCharAudioUri(result ?? null); } catch {}
     setCharRecording(false);
   }
 
-  // ── аудио: комментарий ──
   async function startNoteRecording() {
-    try {
-      await AudioModule.requestRecordingPermissionsAsync();
-      await noteRecorder.record();
-      setNoteRecording(true);
-    } catch { showToast('Ошибка записи', 'err'); }
+    try { await AudioModule.requestRecordingPermissionsAsync(); await noteRecorder.record(); setNoteRecording(true); }
+    catch { showToast('Ошибка записи', 'err'); }
   }
   async function stopNoteRecording() {
-    await noteRecorder.stop();
-    setNoteAudioUri(noteRecorder.uri);
+    try { const result = await noteRecorder.stop(); setNoteAudioUri(result ?? null); } catch {}
     setNoteRecording(false);
   }
 
-  // ── сохранение ──
   async function save() {
     if (!form.name.trim()) { showToast('Введите название', 'err'); return; }
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     setSaving(true);
-    const { data, error } = await supabase.from('visitor_products').insert({
+    const { error } = await supabase.from('visitor_products').insert({
       user_id: user.id, booth_id,
       name: form.name, price: form.price, category: form.category,
-      characteristics: form.characteristics, logistics: form.logistics,
-      note: form.note,
-    }).select().single();
-
-    if (error) { showToast('Ошибка сохранения', 'err'); }
-    else {
-      setSaved(true);
-      setSavedId(data?.id ?? null);
-      showToast('Товар сохранён!', 'ok');
-    }
+      characteristics: form.characteristics, logistics: form.logistics, note: form.note,
+    });
+    if (error) showToast('Ошибка сохранения', 'err');
+    else { setSaved(true); showToast('Товар сохранён!', 'ok'); }
     setSaving(false);
   }
 
-  // ── поделиться ──
   async function shareProduct() {
-  try {
-    const lines = [
-      `📦 ${form.name}`,
-      form.price           ? `💰 ${form.price}`           : '',
-      form.category        ? `🏷️ ${form.category}`        : '',
-      form.characteristics ? `📐 ${form.characteristics}` : '',
-      form.logistics       ? `🚚 ${form.logistics}`       : '',
-      form.note            ? `💬 ${form.note}`            : '',
-      '\n— ExpoHub',
-    ].filter(Boolean).join('\n');
-
-    const path = `${FileSystem.documentDirectory}product_share.txt`;
-    await FileSystem.writeAsStringAsync(path, lines);
-    await Sharing.shareAsync(path, { dialogTitle: 'Поделиться товаром' });
-  } catch { showToast('Ошибка при шаринге', 'err'); }
-}
+    try {
+      const lines = [
+        `📦 ${form.name}`,
+        form.price           ? `💰 ${form.price}`           : '',
+        form.category        ? `🏷️ ${form.category}`        : '',
+        form.characteristics ? `📐 ${form.characteristics}` : '',
+        form.logistics       ? `🚚 ${form.logistics}`       : '',
+        form.note            ? `💬 ${form.note}`            : '',
+        '\n— ExpoHub',
+      ].filter(Boolean).join('\n');
+      const path = `${FileSystem.documentDirectory}product_share.txt`;
+      await FileSystem.writeAsStringAsync(path, lines);
+      await Sharing.shareAsync(path, { dialogTitle: 'Поделиться товаром' });
+    } catch { showToast('Ошибка при шаринге', 'err'); }
+  }
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -266,7 +212,6 @@ export default function AddProduct() {
         </View>
       )}
 
-      {/* шапка с рейтингом */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <Text style={styles.backText}>←</Text>
@@ -275,9 +220,8 @@ export default function AddProduct() {
           <Text style={styles.headerTitle}>Добавить товар</Text>
           <Text style={styles.headerSub}>{booth_name as string}</Text>
         </View>
-        {/* рейтинг в шапке */}
         <View style={styles.headerStars}>
-          {[1, 2, 3, 4, 5].map(star => (
+          {[1,2,3,4,5].map(star => (
             <TouchableOpacity key={star} onPress={() => setForm(p => ({ ...p, rating: star }))}>
               <Text style={[styles.headerStar, form.rating >= star && styles.headerStarActive]}>★</Text>
             </TouchableOpacity>
@@ -287,11 +231,14 @@ export default function AddProduct() {
 
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={styles.body}>
 
-        {/* OCR блок */}
         <View style={styles.ocrBlock}>
           <Text style={styles.sectionTitle}>ФОТО ДЛЯ РАСПОЗНАВАНИЯ</Text>
           <Text style={styles.ocrHint}>Сфотографируйте товар — ИИ заполнит поля автоматически</Text>
-          {mainImage && <Image source={{ uri: mainImage }} style={styles.preview} />}
+          {mainImage && (
+            <TouchableOpacity onPress={() => setViewingPhoto(mainImage)}>
+              <Image source={{ uri: mainImage }} style={styles.preview} />
+            </TouchableOpacity>
+          )}
           {analyzing && (
             <View style={styles.analyzingRow}>
               <ActivityIndicator color={Colors.primary} size="small" />
@@ -310,85 +257,59 @@ export default function AddProduct() {
           </View>
         </View>
 
-        {/* название */}
         <View style={styles.field}>
           <Text style={styles.fieldLabel}>НАЗВАНИЕ ТОВАРА *</Text>
           <TextInput style={styles.fieldInput} placeholder="Диван Loft, Стол Oslo..." placeholderTextColor={Colors.textMuted} value={form.name} onChangeText={v => setForm(p => ({ ...p, name: v }))} />
         </View>
 
-        {/* цена */}
         <View style={[styles.field, { marginTop: 10 }]}>
           <Text style={styles.fieldLabel}>ЦЕНА</Text>
           <TextInput style={styles.fieldInput} placeholder="1 200 €, по запросу..." placeholderTextColor={Colors.textMuted} value={form.price} onChangeText={v => setForm(p => ({ ...p, price: v }))} />
         </View>
 
-        {/* категория */}
         <View style={[styles.field, { marginTop: 10 }]}>
           <Text style={styles.fieldLabel}>КАТЕГОРИЯ</Text>
           <TouchableOpacity style={styles.picker} onPress={() => setShowCatPicker(true)}>
-            <Text style={form.category ? styles.pickerValue : styles.pickerPlaceholder}>
-              {form.category || 'Выберите категорию...'}
-            </Text>
+            <Text style={form.category ? styles.pickerValue : styles.pickerPlaceholder}>{form.category || 'Выберите категорию...'}</Text>
             <Text style={styles.pickerArrow}>▼</Text>
           </TouchableOpacity>
         </View>
 
-        {/* характеристики с микрофоном */}
         <View style={{ marginTop: 10 }}>
-          <FieldWithMic
-            label="ХАРАКТЕРИСТИКИ"
-            placeholder="Размер, материал, цвет, вес..."
-            value={form.characteristics}
-            onChangeText={v => setForm(p => ({ ...p, characteristics: v }))}
-            audioUri={charAudioUri}
-            isRecording={charRecording}
-            onStartRecording={startCharRecording}
-            onStopRecording={stopCharRecording}
-            onDeleteAudio={() => setCharAudioUri(null)}
-          />
+          <FieldWithMic label="ХАРАКТЕРИСТИКИ" placeholder="Размер, материал, цвет, вес..."
+            value={form.characteristics} onChangeText={v => setForm(p => ({ ...p, characteristics: v }))}
+            audioUri={charAudioUri} isRecording={charRecording}
+            onStartRecording={startCharRecording} onStopRecording={stopCharRecording} onDeleteAudio={() => setCharAudioUri(null)} />
         </View>
 
-        {/* логистика */}
         <View style={[styles.field, { marginTop: 10 }]}>
           <Text style={styles.fieldLabel}>ЛОГИСТИЧЕСКИЕ ПАРАМЕТРЫ</Text>
           <TextInput style={[styles.fieldInput, styles.multiline]} placeholder="Срок поставки, страна производства, MOQ..." placeholderTextColor={Colors.textMuted} value={form.logistics} onChangeText={v => setForm(p => ({ ...p, logistics: v }))} multiline />
         </View>
 
-        {/* комментарий с микрофоном */}
         <View style={{ marginTop: 10 }}>
-          <FieldWithMic
-            label="КОММЕНТАРИЙ"
-            placeholder="Впечатления, вопросы, договорённости..."
-            value={form.note}
-            onChangeText={v => setForm(p => ({ ...p, note: v }))}
-            audioUri={noteAudioUri}
-            isRecording={noteRecording}
-            onStartRecording={startNoteRecording}
-            onStopRecording={stopNoteRecording}
-            onDeleteAudio={() => setNoteAudioUri(null)}
-          />
+          <FieldWithMic label="КОММЕНТАРИЙ" placeholder="Впечатления, вопросы, договорённости..."
+            value={form.note} onChangeText={v => setForm(p => ({ ...p, note: v }))}
+            audioUri={noteAudioUri} isRecording={noteRecording}
+            onStartRecording={startNoteRecording} onStopRecording={stopNoteRecording} onDeleteAudio={() => setNoteAudioUri(null)} />
         </View>
 
-        {/* медиафайлы */}
         <View style={[styles.mediaBlock, { marginTop: 16 }]}>
           <Text style={styles.sectionTitle}>МЕДИАФАЙЛЫ</Text>
-          <Text style={styles.ocrHint}>Добавьте до 6 фото товара</Text>
-
-          {/* сетка фото */}
+          <Text style={styles.ocrHint}>Добавьте фото товара (до 10 штук)</Text>
           {mediaImages.length > 0 && (
             <View style={styles.mediaGrid}>
               {mediaImages.map((uri, i) => (
-                <View key={i} style={styles.mediaThumb}>
+                <TouchableOpacity key={i} style={styles.mediaThumb} onPress={() => setViewingPhoto(uri)}>
                   <Image source={{ uri }} style={styles.mediaThumbImg} />
                   <TouchableOpacity style={styles.mediaRemoveBtn} onPress={() => removeMedia(uri)}>
                     <Text style={styles.mediaRemoveText}>✕</Text>
                   </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           )}
-
-          {mediaImages.length < 6 && (
+          {mediaImages.length < 10 && (
             <View style={styles.photoRow}>
               <TouchableOpacity style={styles.photoBtn} onPress={() => addMediaPhoto(true)}>
                 <Text style={styles.photoBtnIcon}>📷</Text>
@@ -402,7 +323,6 @@ export default function AddProduct() {
           )}
         </View>
 
-        {/* кнопки сохранить + поделиться */}
         <View style={styles.actionRow}>
           {saved && (
             <TouchableOpacity style={styles.shareBtn} onPress={shareProduct}>
@@ -424,6 +344,20 @@ export default function AddProduct() {
         <View style={{ height: 40 }} />
       </ScrollView>
 
+      {/* просмотр фото на весь экран */}
+      <Modal visible={!!viewingPhoto} transparent animationType="fade">
+        <TouchableOpacity
+          style={styles.photoViewer}
+          onPress={() => setViewingPhoto(null)}
+          activeOpacity={1}
+        >
+          {viewingPhoto && (
+            <Image source={{ uri: viewingPhoto }} style={styles.photoViewerImg} />
+          )}
+          <Text style={styles.photoViewerHint}>Нажми чтобы закрыть</Text>
+        </TouchableOpacity>
+      </Modal>
+
       {/* модалка категорий */}
       <Modal visible={showCatPicker} transparent animationType="slide">
         <View style={styles.modalOverlay}>
@@ -435,11 +369,8 @@ export default function AddProduct() {
               </TouchableOpacity>
             </View>
             {CATEGORIES.map(cat => (
-              <TouchableOpacity
-                key={cat}
-                style={[styles.catOption, form.category === cat && styles.catOptionActive]}
-                onPress={() => { setForm(p => ({ ...p, category: cat })); setShowCatPicker(false); }}
-              >
+              <TouchableOpacity key={cat} style={[styles.catOption, form.category === cat && styles.catOptionActive]}
+                onPress={() => { setForm(p => ({ ...p, category: cat })); setShowCatPicker(false); }}>
                 <Text style={[styles.catOptionText, form.category === cat && styles.catOptionTextActive]}>{cat}</Text>
                 {form.category === cat && <Text style={styles.catCheck}>✓</Text>}
               </TouchableOpacity>
@@ -457,7 +388,6 @@ const styles = StyleSheet.create({
   toastOk:          { backgroundColor: 'rgba(76,175,80,0.9)' },
   toastErr:         { backgroundColor: 'rgba(196,18,48,0.9)' },
   toastText:        { color: '#fff', fontSize: Font.sm, fontWeight: '600', textAlign: 'center' },
-
   header:           { flexDirection: 'row', alignItems: 'center', gap: 12, paddingTop: 56, paddingHorizontal: 20, paddingBottom: 16, backgroundColor: '#180010', borderBottomWidth: 1, borderBottomColor: Colors.border },
   back:             { width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center' },
   backText:         { color: '#fff', fontSize: 16 },
@@ -466,7 +396,6 @@ const styles = StyleSheet.create({
   headerStars:      { flexDirection: 'row', gap: 2 },
   headerStar:       { fontSize: 20, color: 'rgba(255,255,255,0.2)' },
   headerStarActive: { color: Colors.primary },
-
   body:             { padding: 20 },
   sectionTitle:     { fontSize: Font.xs, color: Colors.textMuted, letterSpacing: 2, fontWeight: '700', marginBottom: 6 },
   ocrBlock:         { backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.lg, padding: 16, marginBottom: 20 },
@@ -479,18 +408,15 @@ const styles = StyleSheet.create({
   photoBtn:         { flex: 1, backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primaryBorder, borderRadius: Radius.md, paddingVertical: 12, alignItems: 'center', gap: 4 },
   photoBtnIcon:     { fontSize: 22 },
   photoBtnText:     { fontSize: Font.xs, color: Colors.primary, fontWeight: '700' },
-
   mediaGrid:        { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
-  mediaThumb:       { width: 80, height: 80, borderRadius: Radius.sm, overflow: 'hidden', position: 'relative' },
+  mediaThumb:       { width: 90, height: 90, borderRadius: Radius.sm, overflow: 'hidden' },
   mediaThumbImg:    { width: '100%', height: '100%', resizeMode: 'cover' },
-  mediaRemoveBtn:   { position: 'absolute', top: 3, right: 3, width: 20, height: 20, borderRadius: 10, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: 'center', justifyContent: 'center' },
-  mediaRemoveText:  { color: '#fff', fontSize: 10, fontWeight: '700' },
-
+  mediaRemoveBtn:   { position: 'absolute', top: 4, right: 4, width: 22, height: 22, borderRadius: 11, backgroundColor: 'rgba(0,0,0,0.65)', alignItems: 'center', justifyContent: 'center' },
+  mediaRemoveText:  { color: '#fff', fontSize: 11, fontWeight: '700' },
   field:            { gap: 6 },
   fieldLabel:       { fontSize: Font.xs, color: Colors.textMuted, fontWeight: '600', marginLeft: 2 },
   fieldInput:       { backgroundColor: Colors.surface, borderWidth: 1.5, borderColor: Colors.border, borderRadius: Radius.md, padding: 14, fontSize: Font.sm, color: Colors.textPrimary },
   multiline:        { minHeight: 80, textAlignVertical: 'top' },
-
   micFieldWrap:     { position: 'relative' },
   micBtn:           { position: 'absolute', bottom: 10, right: 10, width: 32, height: 32, borderRadius: 16, backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, alignItems: 'center', justifyContent: 'center' },
   micBtnActive:     { borderColor: Colors.primary, backgroundColor: Colors.primaryLight },
@@ -499,19 +425,19 @@ const styles = StyleSheet.create({
   audioDeleteBtn:   { fontSize: Font.xs, color: Colors.primary, fontWeight: '600' },
   audioRecording:   { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4 },
   recordingDot:     { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.primary },
-  audioRecordingText:{ fontSize: Font.xs, color: Colors.primary, fontWeight: '600' },
-
+  audioRecordingText: { fontSize: Font.xs, color: Colors.primary, fontWeight: '600' },
   picker:           { backgroundColor: Colors.surface, borderWidth: 1.5, borderColor: Colors.border, borderRadius: Radius.md, padding: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   pickerValue:      { fontSize: Font.sm, color: Colors.textPrimary },
   pickerPlaceholder:{ fontSize: Font.sm, color: Colors.textMuted },
   pickerArrow:      { fontSize: 10, color: Colors.textMuted },
-
   actionRow:        { flexDirection: 'row', gap: 10, marginTop: 24 },
   shareBtn:         { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md, paddingHorizontal: 16, paddingVertical: 16 },
   shareBtnText:     { color: Colors.textSecondary, fontSize: Font.sm, fontWeight: '600' },
   saveBtn:          { flex: 1, backgroundColor: Colors.primary, borderRadius: Radius.md, paddingVertical: 16, alignItems: 'center' },
   saveBtnText:      { color: '#fff', fontSize: Font.md, fontWeight: '700' },
-
+  photoViewer:      { flex: 1, backgroundColor: 'rgba(0,0,0,0.96)', alignItems: 'center', justifyContent: 'center' },
+  photoViewerImg:   { width: '95%', height: '75%', resizeMode: 'contain' },
+  photoViewerHint:  { color: 'rgba(255,255,255,0.3)', marginTop: 16, fontSize: 12 },
   modalOverlay:     { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'flex-end' },
   modal:            { backgroundColor: '#13131f', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, paddingBottom: 40 },
   modalHeader:      { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
@@ -520,6 +446,6 @@ const styles = StyleSheet.create({
   catOption:        { paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: Colors.border, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   catOptionActive:  { borderBottomColor: Colors.primaryBorder },
   catOptionText:    { fontSize: Font.md, color: Colors.textSecondary },
-  catOptionTextActive:{ color: Colors.primary, fontWeight: '700' },
+  catOptionTextActive: { color: Colors.primary, fontWeight: '700' },
   catCheck:         { color: Colors.primary, fontSize: Font.md },
 });
