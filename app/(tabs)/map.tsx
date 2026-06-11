@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Asset } from 'expo-asset';
+import * as FileSystem from 'expo-file-system/legacy';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
 import {
@@ -30,15 +32,28 @@ type Exhibition = {
   end_date: string;
 };
 
-// ─── пути к PNG планам ────────────────────────────────────────
-// Положи PNG файлы в папку assets/maps/ проекта
-// и обнови эти пути
-const PAVILION_PLANS: Record<string, string> = {
+// ─── ресурсы планов ───────────────────────────────────────────
+const PAVILION_ASSETS: Record<string, any> = {
   '9':  require('../../assets/maps/pavilion_9.png'),
   '10': require('../../assets/maps/pavilion_10.png'),
   '11': require('../../assets/maps/pavilion_11.png'),
   '78': require('../../assets/maps/pavilion_78.png'),
 };
+
+// ─── загрузка PNG как base64 через expo-asset ─────────────────
+async function loadPlanBase64(pavilion: string): Promise<string> {
+  try {
+    const asset = PAVILION_ASSETS[pavilion] ?? PAVILION_ASSETS['11'];
+    const [loaded] = await Asset.loadAsync(asset);
+    if (!loaded.localUri) return '';
+    const base64 = await FileSystem.readAsStringAsync(loaded.localUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    return base64;
+  } catch {
+    return '';
+  }
+}
 
 function IconSearch() {
   return (
@@ -57,19 +72,10 @@ function IconFilter({ active }: { active: boolean }) {
   );
 }
 
-function buildLeafletHTML(booths: Booth[], pavilion: string, accentColor: string): string {
-  // Конвертируем require() в URI для WebView
-  // На Android нужно передавать через base64 или file://
-  // Используем Image.resolveAssetSource для получения URI
-  const { Image } = require('react-native');
-  let planUri = '';
-  try {
-    const planAsset = PAVILION_PLANS[pavilion] ?? PAVILION_PLANS['11'];
-    const resolved = Image.resolveAssetSource(planAsset);
-    planUri = resolved?.uri ?? '';
-  } catch {
-    planUri = '';
-  }
+function buildLeafletHTML(booths: Booth[], planBase64: string, accentColor: string): string {
+  const planUri = planBase64
+    ? `data:image/png;base64,${planBase64}`
+    : '';
 
   const boothsJson = JSON.stringify(
     booths.map(b => ({
@@ -90,10 +96,7 @@ function buildLeafletHTML(booths: Booth[], pavilion: string, accentColor: string
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html,body,#map { width:100%; height:100%; background:#0B0B12; }
-  .leaflet-popup-content-wrapper {
-    background:#13131f; border:1px solid rgba(255,255,255,0.1);
-    border-radius:14px; color:#fff; box-shadow:0 8px 32px rgba(0,0,0,0.6);
-  }
+  .leaflet-popup-content-wrapper { background:#13131f; border:1px solid rgba(255,255,255,0.1); border-radius:14px; color:#fff; box-shadow:0 8px 32px rgba(0,0,0,0.6); }
   .leaflet-popup-tip { background:#13131f; }
   .leaflet-popup-content { margin:14px 16px; min-width:200px; }
   .popup-name { font-size:14px; font-weight:700; color:#fff; margin-bottom:3px; }
@@ -123,7 +126,6 @@ const map = L.map('map', {
   zoomControl:true, attributionControl:false,
 });
 
-// Размеры плана в пикселях (нормализуем к 1000x750)
 const MAP_W = 1000;
 const MAP_H = 750;
 const bounds = [[0,0],[MAP_H,MAP_W]];
@@ -131,10 +133,8 @@ const bounds = [[0,0],[MAP_H,MAP_W]];
 if (PLAN_URI) {
   L.imageOverlay(PLAN_URI, bounds, { opacity:1 }).addTo(map);
 } else {
-  // fallback — тёмный фон с сеткой
-  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="750"><rect width="1000" height="750" fill="#0d0d18"/><text x="500" y="375" fill="rgba(255,255,255,0.15)" font-size="20" text-anchor="middle" font-family="sans-serif">Положи PNG план в assets/maps/</text></svg>';
-  const blob = 'data:image/svg+xml;base64,' + btoa(svg);
-  L.imageOverlay(blob, bounds).addTo(map);
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="750"><rect width="1000" height="750" fill="#0d0d18"/><text x="500" y="375" fill="rgba(255,255,255,0.2)" font-size="18" text-anchor="middle" font-family="sans-serif">Загрузка плана...</text></svg>';
+  L.imageOverlay('data:image/svg+xml;base64,'+btoa(svg), bounds).addTo(map);
 }
 map.fitBounds(bounds);
 
@@ -146,28 +146,23 @@ function renderBooths(booths) {
   booths.forEach(booth => {
     const dimmed = activeTags.length > 0 && !activeTags.some(t => booth.tags.includes(t));
     const color = dimmed ? '#444' : ACCENT;
-    const alpha = dimmed ? 0.1 : 0.28;
 
     if (booth.polygon && booth.polygon.length >= 4) {
-      // Конвертируем нормализованные координаты (0-1) в пиксели карты
       const latlngs = booth.polygon.map(p => [MAP_H - p.y * MAP_H, p.x * MAP_W]);
       const poly = L.polygon(latlngs, {
         color, fillColor: color,
-        fillOpacity: dimmed ? 0.05 : alpha,
+        fillOpacity: dimmed ? 0.05 : 0.28,
         weight: dimmed ? 0.5 : 1.5,
       }).addTo(map);
 
       if (!dimmed) {
-        // метка с номером
         const cx = booth.cx ? booth.cx * MAP_W : latlngs.reduce((s,p)=>s+p[1],0)/latlngs.length;
         const cy = booth.cy ? MAP_H - booth.cy * MAP_H : latlngs.reduce((s,p)=>s+p[0],0)/latlngs.length;
         const label = L.divIcon({
           html: '<div style="font-size:9px;font-weight:700;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.9);pointer-events:none;text-align:center;">'+(booth.number||'')+'</div>',
           className:'', iconAnchor:[20,8], iconSize:[40,16],
         });
-        const lm = L.marker([cy, cx], { icon: label, interactive: false }).addTo(map);
-        markers.push(lm);
-
+        markers.push(L.marker([cy, cx], { icon: label, interactive: false }).addTo(map));
         poly.bindPopup(buildPopup(booth));
         poly.on('click', () => { poly.openPopup(); notifySelected(booth.id); });
       }
@@ -263,6 +258,7 @@ export default function MapScreen() {
   const [loading, setLoading] = useState(true);
   const [activated, setActivated] = useState(false);
   const [activePavilion, setActivePavilion] = useState('11');
+  const [planBase64, setPlanBase64] = useState('');
   const [selectedBooth, setSelectedBooth] = useState<Booth | null>(null);
   const [search, setSearch] = useState('');
   const [activeTags, setActiveTags] = useState<string[]>([]);
@@ -276,15 +272,31 @@ export default function MapScreen() {
     const activeId = await AsyncStorage.getItem('active_exhibition_id');
     if (!activeId) { setActivated(false); setLoading(false); return; }
     setActivated(true);
+
     const { data: exData } = await supabase.from('exhibitions').select('*').eq('id', activeId).single();
     if (exData) setExhibition(exData);
+
     if (exData) {
       const { data: boothData } = await supabase.from('booths')
         .select('id,company_name,booth_number,hall,pavilion,tags,map_center_x,map_center_y,map_polygon')
         .eq('exhibition_id', exData.id).order('booth_number');
       if (boothData) setBooths(boothData);
     }
+
+    // загружаем план павильона 11 по умолчанию
+    const b64 = await loadPlanBase64('11');
+    setPlanBase64(b64);
+
     setLoading(false);
+  }
+
+  async function switchPavilion(pav: string) {
+    setActivePavilion(pav); setSelectedBooth(null); setSearch(''); setSearchNotFound(false);
+    // загружаем план нового павильона
+    const b64 = await loadPlanBase64(pav);
+    setPlanBase64(b64);
+    const filtered = booths.filter(b => b.pavilion === pav || !b.pavilion);
+    webViewRef.current?.postMessage(JSON.stringify({ type:'SET_BOOTHS', booths:filtered }));
   }
 
   const allTags = [...new Set(booths.flatMap(b => b.tags ?? []))].sort();
@@ -307,12 +319,6 @@ export default function MapScreen() {
     webViewRef.current?.postMessage(JSON.stringify({ type:'SET_TAGS', tags:[] }));
   }
 
-  function switchPavilion(pav: string) {
-    setActivePavilion(pav); setSelectedBooth(null); setSearch(''); setSearchNotFound(false);
-    const filtered = booths.filter(b => b.pavilion === pav || !b.pavilion);
-    webViewRef.current?.postMessage(JSON.stringify({ type:'SET_BOOTHS', booths:filtered }));
-  }
-
   function handleWebViewMessage(event: { nativeEvent: { data: string } }) {
     try {
       const msg = JSON.parse(event.nativeEvent.data);
@@ -330,7 +336,7 @@ export default function MapScreen() {
     await supabase.from('booth_visits').insert({ user_id:user.id, exhibition_id:exhibition.id, booth_id:boothId, interaction:'view' });
   }
 
-  const htmlContent = buildLeafletHTML(visibleBooths, activePavilion, exhibition?.color ?? Colors.primary);
+  const htmlContent = buildLeafletHTML(visibleBooths, planBase64, exhibition?.color ?? Colors.primary);
 
   if (loading) return (
     <View style={styles.loader}>
